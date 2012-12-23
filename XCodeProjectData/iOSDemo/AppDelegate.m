@@ -52,7 +52,7 @@
 	    self.splitViewController.delegate = detailViewController;
 	    self.splitViewController.viewControllers = @[masterNavigationController, detailNavigationController];
 	    
-	    self.window.rootViewController = self.splitViewController;
+		self.window.rootViewController = self.splitViewController;
 	}
     [self.window makeKeyAndVisible];
     return YES;

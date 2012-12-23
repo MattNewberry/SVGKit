@@ -234,33 +234,20 @@
 	[self.contentView setNeedsDisplay];
 }
 
-- (void)splitViewController:(UISplitViewController *)svc
-	 willHideViewController:(UIViewController *)aViewController
-		  withBarButtonItem:(UIBarButtonItem *)barButtonItem
-	   forPopoverController:(UIPopoverController *)pc {
-	
-	barButtonItem.title = @"Samples";
-	
-	NSMutableArray *items = [[toolbar items] mutableCopy];
-	[items insertObject:barButtonItem atIndex:0];
-	
-	[toolbar setItems:items animated:YES];
-	[items release];
-	
-	self.popoverController = pc;
+#pragma mark - Split view
+
+- (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
+{
+    barButtonItem.title = NSLocalizedString(@"Master", @"Master");
+    [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
+    self.popoverController = popoverController;
 }
 
-- (void)splitViewController:(UISplitViewController *)svc
-	 willShowViewController:(UIViewController *)aViewController
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-	NSMutableArray *items = [[toolbar items] mutableCopy];
-	[items removeObjectAtIndex:0];
-	
-	[toolbar setItems:items animated:YES];
-	[items release];
-	
-	self.popoverController = nil;
+- (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    // Called when the view is shown again in the split view, invalidating the button and popover controller.
+    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    self.popoverController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
