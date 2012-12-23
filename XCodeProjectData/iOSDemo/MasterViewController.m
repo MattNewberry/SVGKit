@@ -9,6 +9,10 @@
 
 #import "DetailViewController.h"
 
+@interface MasterViewController()
+@property(nonatomic,retain) NSString* nameOfBrokenSVGToLoad;
+@end
+
 @implementation MasterViewController
 
 @synthesize sampleNames = _sampleNames;
@@ -82,6 +86,12 @@
 	if( [[_sampleNames objectAtIndex:indexPath.row] isEqualToString:@"Reinel_compass_rose"])
 	{
 		NSLog(@"*****************\n*   WARNING\n*\n* The sample 'Reinel_compass_rose' is currently unsupported;\n* it is included in this build so that people working on it can test it and see if it works yet\n*\n*\n*****************");
+		
+		[[[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Reinel_compass_rose breaks SVGKit, it uses unsupported SVG commands; until we have added support for those commands, it's here as a test - but it WILL CRASH if you try to view it" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK, crash",nil] show];
+		
+		self.nameOfBrokenSVGToLoad = [_sampleNames objectAtIndex:indexPath.row];
+		
+		return;
 	}
 	
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -93,6 +103,29 @@
     } else {
         self.detailViewController.detailItem = [_sampleNames objectAtIndex:indexPath.row];
     }
+}
+
+#pragma mark - alertview delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if( buttonIndex == 0 )
+	{
+		NSLog(@"[%@] Apple hates all developers. Why did they have a 'cancel clicked' if they also send 'cancel' as 'not cancelled'?", [self class]);
+		return;
+	}
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+	    if (!self.detailViewController) {
+	        self.detailViewController = [[[DetailViewController alloc] initWithNibName:@"iPhoneDetailViewController" bundle:nil] autorelease];
+	    }
+	    [self.navigationController pushViewController:self.detailViewController animated:YES];
+		self.detailViewController.detailItem = self.nameOfBrokenSVGToLoad;
+    } else {
+        self.detailViewController.detailItem = self.nameOfBrokenSVGToLoad;
+    }
+	
+	self.nameOfBrokenSVGToLoad = nil;
 }
 
 @end

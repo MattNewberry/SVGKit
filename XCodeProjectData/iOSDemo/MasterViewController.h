@@ -7,7 +7,7 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UITableViewController <UIAlertViewDelegate>
 
 @property(nonatomic,retain) NSMutableArray *sampleNames;
 
